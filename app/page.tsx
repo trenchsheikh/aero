@@ -6,7 +6,6 @@ import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { useRouter } from 'next/navigation';
 import { store, AeroProfile } from '@/lib/store';
 import { PaymentModal } from '@/components/PaymentModal';
-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Features } from '@/components/blocks/features-8';
 
 type Step = 'claim' | 'profile';
@@ -215,27 +214,6 @@ export default function HomePage() {
               </button>
             </div>
           )}
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="py-16 px-4">
-        <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {[
-            { title: 'One link', desc: 'Share aero.me/you and get paid from any wallet instantly.' },
-            { title: 'Privacy links', desc: 'Generate one-time anonymous payment URLs that expire after use' },
-            { title: 'No friction', desc: 'Sender needs no Aero account — just a Solana wallet' },
-          ].map(f => (
-            <Card
-              key={f.title}
-              className="bg-white border-brand/20 shadow-sm hover:shadow-md hover:border-brand/35 transition-all"
-            >
-              <CardHeader>
-                <CardTitle className="text-ink font-medium text-base">{f.title}</CardTitle>
-                <CardDescription className="text-ink-muted font-light leading-relaxed">{f.desc}</CardDescription>
-              </CardHeader>
-            </Card>
-          ))}
         </div>
       </section>
 

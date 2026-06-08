@@ -10,7 +10,7 @@ export function Features() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
 
           {/* Card 1: 100% Non-custodial — large */}
-          <Card className="col-span-1 sm:col-span-2 lg:col-span-4 relative overflow-hidden border-brand/20 bg-white shadow-sm">
+          <Card className="col-span-1 sm:col-span-2 lg:col-span-4 relative overflow-hidden border-brand/25 bg-white shadow-sm ring-0">
             <CardContent className="relative flex flex-col items-center pt-6 pb-6">
               <div className="relative flex h-24 w-56 items-center">
                 <svg
@@ -34,9 +34,9 @@ export function Features() {
           </Card>
 
           {/* Card 2: On-chain verified — fingerprint */}
-          <Card className="col-span-1 lg:col-span-2 relative overflow-hidden border-brand/20 bg-white shadow-sm">
+          <Card className="col-span-1 lg:col-span-2 relative overflow-hidden border-brand/25 bg-white shadow-sm ring-0">
             <CardContent className="pt-6">
-              <div className="relative mx-auto flex aspect-square size-28 rounded-full border border-brand/20 before:absolute before:-inset-2 before:rounded-full before:border before:border-brand/10">
+              <div className="relative mx-auto flex aspect-square size-28 rounded-full border border-brand/25 before:absolute before:-inset-2 before:rounded-full before:border before:border-brand/10">
                 <svg
                   className="m-auto h-fit w-20 text-ink-muted"
                   viewBox="0 0 212 143"
@@ -81,7 +81,7 @@ export function Features() {
           </Card>
 
           {/* Card 3: Sub-second settlement — chart */}
-          <Card className="col-span-1 sm:col-span-2 lg:col-span-2 relative overflow-hidden border-brand/20 bg-white shadow-sm">
+          <Card className="col-span-1 sm:col-span-2 lg:col-span-2 relative overflow-hidden border-brand/25 bg-white shadow-sm ring-0">
             <CardContent className="pt-6">
               <div className="lg:px-4">
                 <svg className="w-full text-brand" viewBox="0 0 386 123" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -116,10 +116,10 @@ export function Features() {
           </Card>
 
           {/* Card 4: Privacy first — Shield + chart */}
-          <Card className="col-span-1 sm:col-span-2 lg:col-span-4 relative overflow-hidden border-brand/20 bg-white shadow-sm">
+          <Card className="col-span-1 sm:col-span-2 lg:col-span-4 relative overflow-hidden border-brand/25 bg-white shadow-sm ring-0">
             <CardContent className="grid pt-6 sm:grid-cols-2 h-full">
               <div className="relative z-10 flex flex-col justify-between space-y-8 lg:space-y-6">
-                <div className="relative flex aspect-square size-12 rounded-full border border-brand/20 before:absolute before:-inset-2 before:rounded-full before:border before:border-brand/10">
+                <div className="relative flex aspect-square size-12 rounded-full border border-brand/25 before:absolute before:-inset-2 before:rounded-full before:border before:border-brand/10">
                   <Shield className="m-auto size-5 text-brand" strokeWidth={1.5} />
                 </div>
                 <div className="space-y-2">
@@ -131,9 +131,9 @@ export function Features() {
               </div>
               <div className="relative mt-6 sm:mt-0 sm:ml-6 border-l border-t border-brand/10 rounded-tl-xl p-6">
                 <div className="absolute left-3 top-2 flex gap-1">
-                  <span className="block size-2 rounded-full bg-brand/20 border border-brand/20" />
-                  <span className="block size-2 rounded-full bg-brand/20 border border-brand/20" />
-                  <span className="block size-2 rounded-full bg-brand/20 border border-brand/20" />
+                  <span className="block size-2 rounded-full bg-brand/20 border border-brand/25" />
+                  <span className="block size-2 rounded-full bg-brand/20 border border-brand/25" />
+                  <span className="block size-2 rounded-full bg-brand/20 border border-brand/25" />
                 </div>
                 <svg className="w-full" viewBox="0 0 366 231" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -160,10 +160,10 @@ export function Features() {
           </Card>
 
           {/* Card 5: Pay anyone — Users + avatars */}
-          <Card className="col-span-1 sm:col-span-2 lg:col-span-3 relative overflow-hidden border-brand/20 bg-white shadow-sm">
+          <Card className="col-span-1 sm:col-span-2 lg:col-span-3 relative overflow-hidden border-brand/25 bg-white shadow-sm ring-0">
             <CardContent className="grid h-full pt-6 sm:grid-cols-2">
               <div className="relative z-10 flex flex-col justify-between space-y-8 lg:space-y-6">
-                <div className="relative flex aspect-square size-12 rounded-full border border-brand/20 before:absolute before:-inset-2 before:rounded-full before:border before:border-brand/10">
+                <div className="relative flex aspect-square size-12 rounded-full border border-brand/25 before:absolute before:-inset-2 before:rounded-full before:border before:border-brand/10">
                   <Users className="m-auto size-5 text-brand" strokeWidth={1.5} />
                 </div>
                 <div className="space-y-2">
@@ -176,7 +176,7 @@ export function Features() {
               <div className="relative mt-6 before:absolute before:inset-0 before:mx-auto before:w-px before:bg-brand/15 sm:-my-6 sm:-mr-6">
                 <div className="relative flex h-full flex-col justify-center space-y-6 py-6">
                   <div className="relative flex w-[calc(50%+0.875rem)] items-center justify-end gap-2">
-                    <span className="block h-fit rounded border border-brand/20 px-2 py-1 text-xs text-ink-muted shadow-sm">James K.</span>
+                    <span className="block h-fit rounded border border-brand/25 px-2 py-1 text-xs text-ink-muted shadow-sm">James K.</span>
                     <div className="ring-white size-7 ring-2 rounded-full overflow-hidden">
                       <img
                         className="size-full object-cover"
@@ -193,10 +193,10 @@ export function Features() {
                         alt="User"
                       />
                     </div>
-                    <span className="block h-fit rounded border border-brand/20 px-2 py-1 text-xs text-ink-muted shadow-sm">Sara M.</span>
+                    <span className="block h-fit rounded border border-brand/25 px-2 py-1 text-xs text-ink-muted shadow-sm">Sara M.</span>
                   </div>
                   <div className="relative flex w-[calc(50%+0.875rem)] items-center justify-end gap-2">
-                    <span className="block h-fit rounded border border-brand/20 px-2 py-1 text-xs text-ink-muted shadow-sm">Alex R.</span>
+                    <span className="block h-fit rounded border border-brand/25 px-2 py-1 text-xs text-ink-muted shadow-sm">Alex R.</span>
                     <div className="ring-white size-7 ring-2 rounded-full overflow-hidden">
                       <img
                         className="size-full object-cover"
@@ -211,7 +211,7 @@ export function Features() {
           </Card>
 
           {/* Card 6: One link — simple stat */}
-          <Card className="col-span-1 sm:col-span-2 lg:col-span-3 relative overflow-hidden border-brand/20 bg-white shadow-sm">
+          <Card className="col-span-1 sm:col-span-2 lg:col-span-3 relative overflow-hidden border-brand/25 bg-white shadow-sm ring-0">
             <CardContent className="flex flex-col justify-between h-full pt-6 pb-6 space-y-6">
               <div className="space-y-2">
                 <p className="text-xs text-ink-subtle font-light tracking-widest uppercase">Average settlement time</p>
