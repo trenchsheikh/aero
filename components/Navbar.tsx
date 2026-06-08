@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { store } from '@/lib/store';
 
 export function Navbar() {
-  const { publicKey, disconnect } = useWallet();
+  const { publicKey } = useWallet();
   const router = useRouter();
   const [username, setUsername] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -25,9 +25,9 @@ export function Navbar() {
   }, [publicKey]);
 
   return (
-    <div className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4">
+    <div className="fixed top-3 sm:top-4 left-0 right-0 z-50 flex justify-center px-3 sm:px-4">
       <nav
-        className="w-full max-w-3xl rounded-2xl px-5 h-14 flex items-center justify-between gap-4"
+        className="w-full max-w-3xl rounded-2xl px-4 sm:px-5 h-13 sm:h-14 flex items-center justify-between gap-2 sm:gap-4"
         style={{
           background: 'rgba(255, 255, 255, 0.6)',
           backdropFilter: 'blur(24px) saturate(200%)',
@@ -39,13 +39,13 @@ export function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-1.5 shrink-0">
           <span className="text-ink font-semibold text-lg tracking-tight">aero</span>
-          <span className="text-[10px] text-ink-subtle font-light bg-brand/8 border border-brand/20 rounded-full px-1.5 py-0.5 leading-none">
+          <span className="text-[10px] text-ink-subtle font-light bg-brand/8 border border-brand/20 rounded-full px-1.5 py-0.5 leading-none hidden xs:inline">
             beta
           </span>
         </Link>
 
         {/* Right side */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 min-w-0">
           {publicKey && username && (
             <Link
               href={`/${username}`}
@@ -59,7 +59,7 @@ export function Navbar() {
           {publicKey && username && (
             <button
               onClick={() => router.push(`/${username}`)}
-              className="group hidden sm:flex items-center gap-1.5 text-sm font-medium text-white bg-brand hover:bg-brand/80 hover:shadow-[0_2px_12px_rgba(91,192,240,0.35)] transition-all px-4 py-1.5 rounded-xl"
+              className="group hidden sm:flex items-center gap-1.5 text-sm font-medium text-white bg-brand hover:bg-brand/80 hover:shadow-[0_2px_12px_rgba(91,192,240,0.35)] transition-all px-4 py-1.5 rounded-xl touch-manipulation"
             >
               Receive
               <svg className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-y-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -69,21 +69,26 @@ export function Navbar() {
           )}
 
           {mounted ? (
-            <WalletMultiButton
-              style={{
-                background: publicKey ? 'rgba(91,192,240,0.1)' : 'rgba(91,192,240,1)',
-                border: '1px solid rgba(91,192,240,0.3)',
-                borderRadius: '12px',
-                color: publicKey ? '#0C1B30' : '#ffffff',
-                fontSize: '13px',
-                fontWeight: '400',
-                height: '34px',
-                padding: '0 14px',
-                transition: 'all 0.2s',
-              }}
-            />
+            <div className="shrink-0" style={{ maxWidth: '160px' }}>
+              <WalletMultiButton
+                style={{
+                  background: publicKey ? 'rgba(91,192,240,0.1)' : 'rgba(91,192,240,1)',
+                  border: '1px solid rgba(91,192,240,0.3)',
+                  borderRadius: '12px',
+                  color: publicKey ? '#0C1B30' : '#ffffff',
+                  fontSize: '13px',
+                  fontWeight: '400',
+                  height: '34px',
+                  padding: '0 12px',
+                  transition: 'all 0.2s',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  maxWidth: '160px',
+                }}
+              />
+            </div>
           ) : (
-            <div className="h-[34px] w-32 rounded-xl bg-brand/10 animate-pulse" />
+            <div className="h-[34px] w-28 sm:w-32 rounded-xl bg-brand/10 animate-pulse" />
           )}
         </div>
       </nav>

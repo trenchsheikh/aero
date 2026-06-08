@@ -4,6 +4,20 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ── Mobile base ── */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button, a, [role="button"] {
+  touch-action: manipulation;
+}
+
+/* Safe area padding for iPhone home bar */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
 /* ── Wallet adapter modal — light theme ── */
 
 /* Backdrop */

@@ -131,17 +131,22 @@ export function PaymentModal({ recipientWallet, recipientUsername, displayName, 
   const isValidAmount = amount && !isNaN(sol) && sol > 0 && !amountError;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex flex-col justify-end sm:items-center sm:justify-center sm:p-4">
       <div className="absolute inset-0 bg-ink/15 backdrop-blur-sm" onClick={step === 'confirm' ? undefined : onClose} />
-      <div className="relative bg-white border border-brand/20 rounded-2xl w-full max-w-sm p-6 shadow-xl">
+      <div className="relative bg-white border border-brand/20 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-sm px-5 sm:px-6 pt-5 pb-8 sm:pb-6 shadow-xl">
+
+        {/* Drag handle — mobile only */}
+        <div className="sm:hidden flex justify-center mb-3">
+          <div className="w-10 h-1 bg-brand/20 rounded-full" />
+        </div>
 
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-5 sm:mb-6">
           <h2 className="text-ink font-medium text-lg">
             {step === 'success' ? 'Sent!' : step === 'error' ? (payError?.title ?? 'Error') : `Pay ${displayName}`}
           </h2>
           {step !== 'confirm' && (
-            <button onClick={onClose} className="text-ink-subtle hover:text-brand text-xl leading-none transition-colors">
+            <button onClick={onClose} className="text-ink-subtle hover:text-brand text-xl leading-none transition-colors p-1 touch-manipulation">
               ×
             </button>
           )}
@@ -193,6 +198,7 @@ export function PaymentModal({ recipientWallet, recipientUsername, displayName, 
                     placeholder="0.00"
                     min="0"
                     step="0.001"
+                    inputMode="decimal"
                     autoFocus
                     className={`w-full bg-brand/5 border rounded-xl px-4 py-3 text-ink text-xl font-mono focus:outline-none transition-colors ${
                       amountError ? 'border-red-400 focus:border-red-500' : 'border-brand/20 focus:border-brand/50'
@@ -243,7 +249,7 @@ export function PaymentModal({ recipientWallet, recipientUsername, displayName, 
                 <button
                   onClick={handlePay}
                   disabled={!isValidAmount}
-                  className="w-full bg-brand text-white font-medium rounded-xl py-3 hover:bg-brand/80 hover:shadow-[0_4px_16px_rgba(91,192,240,0.35)] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                  className="w-full bg-brand text-white font-medium rounded-xl py-4 sm:py-3 hover:bg-brand/80 hover:shadow-[0_4px_16px_rgba(91,192,240,0.35)] disabled:opacity-30 disabled:cursor-not-allowed transition-all touch-manipulation"
                 >
                   Send {amount && !isNaN(sol) && sol > 0 ? `${sol} SOL` : ''}
                 </button>

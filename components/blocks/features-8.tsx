@@ -118,7 +118,7 @@ export function Features() {
           {/* Card 4: Privacy first — Shield + chart */}
           <Card className="col-span-1 sm:col-span-2 lg:col-span-4 relative overflow-hidden border-brand/25 bg-white shadow-sm ring-0">
             <CardContent className="grid pt-6 sm:grid-cols-2 h-full">
-              <div className="relative z-10 flex flex-col justify-between space-y-8 lg:space-y-6">
+              <div className="relative z-10 flex flex-col justify-between space-y-6">
                 <div className="relative flex aspect-square size-12 rounded-full border border-brand/25 before:absolute before:-inset-2 before:rounded-full before:border before:border-brand/10">
                   <Shield className="m-auto size-5 text-brand" strokeWidth={1.5} />
                 </div>
@@ -129,7 +129,7 @@ export function Features() {
                   </p>
                 </div>
               </div>
-              <div className="relative mt-6 sm:mt-0 sm:ml-6 border-l border-t border-brand/10 rounded-tl-xl p-6">
+              <div className="relative mt-4 sm:mt-0 sm:ml-6 border-t border-brand/10 sm:border-t-0 sm:border-l rounded-tl-xl p-4 sm:p-6">
                 <div className="absolute left-3 top-2 flex gap-1">
                   <span className="block size-2 rounded-full bg-brand/20 border border-brand/25" />
                   <span className="block size-2 rounded-full bg-brand/20 border border-brand/25" />
@@ -162,7 +162,7 @@ export function Features() {
           {/* Card 5: Pay anyone — Users + avatars */}
           <Card className="col-span-1 sm:col-span-2 lg:col-span-3 relative overflow-hidden border-brand/25 bg-white shadow-sm ring-0">
             <CardContent className="grid h-full pt-6 sm:grid-cols-2">
-              <div className="relative z-10 flex flex-col justify-between space-y-8 lg:space-y-6">
+              <div className="relative z-10 flex flex-col justify-between space-y-6">
                 <div className="relative flex aspect-square size-12 rounded-full border border-brand/25 before:absolute before:-inset-2 before:rounded-full before:border before:border-brand/10">
                   <Users className="m-auto size-5 text-brand" strokeWidth={1.5} />
                 </div>
@@ -173,7 +173,8 @@ export function Features() {
                   </p>
                 </div>
               </div>
-              <div className="relative mt-6 before:absolute before:inset-0 before:mx-auto before:w-px before:bg-brand/15 sm:-my-6 sm:-mr-6">
+              {/* Divider: horizontal on mobile, vertical on sm+ */}
+              <div className="relative mt-6 border-t border-brand/10 sm:border-t-0 sm:before:absolute sm:before:inset-0 sm:before:mx-auto sm:before:w-px sm:before:bg-brand/15 sm:-my-6 sm:-mr-6">
                 <div className="relative flex h-full flex-col justify-center space-y-6 py-6">
                   <div className="relative flex w-[calc(50%+0.875rem)] items-center justify-end gap-2">
                     <span className="block h-fit rounded border border-brand/25 px-2 py-1 text-xs text-ink-muted shadow-sm">James K.</span>
