@@ -4,22 +4,93 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Override wallet adapter modal styles */
+/* ── Wallet adapter modal — light theme ── */
+
+/* Backdrop */
+.wallet-adapter-modal {
+  background: rgba(12, 27, 48, 0.18) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+/* Modal card */
 .wallet-adapter-modal-wrapper {
   background: #FFFFFF !important;
-  border: 1px solid rgba(91,192,240,0.25) !important;
-  border-radius: 16px !important;
+  border: 1px solid rgba(91, 192, 240, 0.25) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 8px 40px rgba(91, 192, 240, 0.12), 0 1px 0 rgba(255,255,255,0.9) inset !important;
+  padding: 28px !important;
 }
 
+/* Title */
 .wallet-adapter-modal-title {
   color: #0C1B30 !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.01em !important;
 }
 
-.wallet-adapter-modal-list li { color: #0C1B30 !important; }
+/* Close button */
+.wallet-adapter-modal-button-close {
+  background: rgba(91, 192, 240, 0.08) !important;
+  border: 1px solid rgba(91, 192, 240, 0.2) !important;
+  border-radius: 10px !important;
+}
+.wallet-adapter-modal-button-close:hover {
+  background: rgba(91, 192, 240, 0.15) !important;
+}
+.wallet-adapter-modal-button-close svg {
+  fill: #4A6B8A !important;
+}
 
+/* Wallet list */
+.wallet-adapter-modal-list {
+  margin: 0 !important;
+}
+.wallet-adapter-modal-list li {
+  padding: 0 !important;
+}
+.wallet-adapter-modal-list .wallet-adapter-button {
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  border-radius: 12px !important;
+  color: #0C1B30 !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  padding: 10px 14px !important;
+  transition: all 0.15s !important;
+  width: 100% !important;
+}
+.wallet-adapter-modal-list .wallet-adapter-button:hover {
+  background: rgba(91, 192, 240, 0.08) !important;
+  border-color: rgba(91, 192, 240, 0.25) !important;
+}
+.wallet-adapter-modal-list .wallet-adapter-button-end-icon,
+.wallet-adapter-modal-list .wallet-adapter-button-start-icon {
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* "More options" collapse toggle */
+.wallet-adapter-modal-collapse-button {
+  color: #4A6B8A !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+}
+.wallet-adapter-modal-collapse-button svg {
+  fill: #5BC0F0 !important;
+}
+
+/* Detected / not-detected labels */
+.wallet-adapter-modal-list .wallet-adapter-button p {
+  color: #8AAABB !important;
+  font-size: 11px !important;
+}
+
+/* General button reset */
 .wallet-adapter-button {
   font-family: inherit !important;
-  font-weight: 300 !important;
+  font-weight: 400 !important;
 }
 
 input[type=number]::-webkit-inner-spin-button,
