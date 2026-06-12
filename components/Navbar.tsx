@@ -44,16 +44,51 @@ export function Navbar() {
 
   return (
     <div className="fixed top-4 sm:top-5 left-0 right-0 z-50 flex justify-center px-4">
+      <style>{`
+        .liquid-glass-nav {
+          position: relative;
+          background: rgba(255, 255, 255, 0.08);
+          backdrop-filter: blur(40px) saturate(180%);
+          -webkit-backdrop-filter: blur(40px) saturate(180%);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          box-shadow:
+            0 4px 32px rgba(0, 0, 0, 0.35),
+            0 1px 0 rgba(255, 255, 255, 0.22) inset,
+            0 -1px 0 rgba(0, 0, 0, 0.15) inset;
+        }
+        .liquid-glass-nav::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: 9999px;
+          background: linear-gradient(
+            135deg,
+            rgba(255,255,255,0.18) 0%,
+            rgba(255,255,255,0.04) 40%,
+            rgba(255,255,255,0.0) 60%,
+            rgba(255,255,255,0.06) 100%
+          );
+          pointer-events: none;
+        }
+        .liquid-glass-nav::after {
+          content: '';
+          position: absolute;
+          top: 0; left: 10%; right: 10%;
+          height: 1px;
+          background: linear-gradient(
+            to right,
+            transparent,
+            rgba(255,255,255,0.55) 30%,
+            rgba(255,255,255,0.55) 70%,
+            transparent
+          );
+          border-radius: 9999px;
+          pointer-events: none;
+        }
+      `}</style>
       <nav
-        className="flex items-center justify-between px-5 h-12 rounded-full"
-        style={{
-          background: 'rgba(8, 8, 8, 0.88)',
-          backdropFilter: 'blur(24px)',
-          WebkitBackdropFilter: 'blur(24px)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-          boxShadow: '0 1px 40px rgba(0,0,0,0.5)',
-          width: 'min(560px, 100%)',
-        }}
+        className="liquid-glass-nav flex items-center justify-between px-5 h-12 rounded-full"
+        style={{ width: 'min(560px, 100%)' }}
       >
         {/* Logo */}
         <Link href="/" className="flex items-center shrink-0">
@@ -76,7 +111,7 @@ export function Navbar() {
                     whiteSpace: 'nowrap',
                   }}
                 >
-                  aerome.io/{username}
+                  useaero.io/{username}
                   <svg
                     width="10" height="10" viewBox="0 0 10 10" fill="none"
                     style={{ opacity: 0.5, transition: 'transform 0.2s', transform: open ? 'rotate(180deg)' : 'rotate(0deg)', flexShrink: 0 }}

@@ -38,7 +38,7 @@ export default function ProfilePage({ params }: { params: Promise<{ username: st
         <h1 style={{ color: '#fff', fontSize: '1.25rem', fontWeight: 300, fontFamily: 'var(--font-inter)' }}>@{username} not found</h1>
         <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.875rem', fontWeight: 300 }}>This handle hasn&apos;t been claimed yet.</p>
         <a href="/" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.875rem', textDecoration: 'none', borderBottom: '1px solid rgba(255,255,255,0.2)', paddingBottom: '1px' }}>
-          Claim aerome.io/{username}
+          Claim useaero.io/{username}
         </a>
       </div>
     );
@@ -65,7 +65,7 @@ export default function ProfilePage({ params }: { params: Promise<{ username: st
                 {profile.displayName}
               </h1>
               <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.875rem', fontWeight: 300, marginTop: '0.375rem' }}>
-                aerome.io/{profile.username}
+                useaero.io/{profile.username}
               </p>
               {profile.bio && (
                 <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.875rem', fontWeight: 300, marginTop: '0.875rem', lineHeight: 1.65, borderLeft: '2px solid rgba(255,255,255,0.1)', paddingLeft: '0.75rem' }}>

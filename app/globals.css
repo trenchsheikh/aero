@@ -4,10 +4,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* ── Smooth scroll ── */
-html {
-  scroll-behavior: smooth;
-}
+/* scroll-behavior set dynamically by SmoothScroll.tsx on desktop */
 
 /* ── Chain carousel animation ── */
 @keyframes carousel-scroll {
@@ -15,14 +12,38 @@ html {
   to   { transform: translateX(-50%); }
 }
 
+/* ── Spinner ── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Scroll section height ── */
+.scroll-section { height: 260vh; }
+@media (max-width: 640px) {
+  .scroll-section { height: 220vh; }
+}
+
+/* ── Hide scrollbar ── */
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar {
+  display: none;
+}
+
 /* ── Mobile base ── */
 * {
   -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
 }
 
 button, a, [role="button"] {
   touch-action: manipulation;
 }
+
+/* Prevent text from overflowing its container on small screens */
+img { max-width: 100%; }
 
 /* Safe area padding for iPhone home bar */
 .pb-safe {

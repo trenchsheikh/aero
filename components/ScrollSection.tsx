@@ -41,7 +41,8 @@ export function ScrollSection() {
   return (
     <section
       ref={sectionRef}
-      style={{ height: '260vh', background: '#000', position: 'relative' }}
+      className="scroll-section"
+      style={{ background: '#000', position: 'relative' }}
     >
       {/* Sticky viewport frame */}
       <div style={{ position: 'sticky', top: 0, height: '100vh', overflow: 'hidden' }}>
@@ -65,14 +66,16 @@ export function ScrollSection() {
             style={{
               fontFamily: 'var(--font-inter)',
               fontWeight: 600,
-              fontSize: 'clamp(1.25rem, 3.2vw, 2rem)',
+              fontSize: 'clamp(1.1rem, 4vw, 2rem)',
               color: '#ffffff',
               textAlign: 'center',
-              maxWidth: '24rem',
-              padding: '0 1.5rem',
+              maxWidth: '22rem',
+              padding: '0 2rem',
               lineHeight: 1.3,
               letterSpacing: '-0.02em',
-              textShadow: '0 0 60px rgba(0,0,0,1)',
+              textShadow: '0 0 80px rgba(0,0,0,1), 0 0 40px rgba(0,0,0,1)',
+              zIndex: 10,
+              position: 'relative',
             }}
           >
             Pay or get paid by anyone, within a touch.

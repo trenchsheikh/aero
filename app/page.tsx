@@ -153,18 +153,31 @@ export default function HomePage() {
         className="relative flex flex-col"
         style={{ minHeight: '100vh' }}
       >
-        {/* Subtle radial glow */}
+        {/* Video background */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+          style={{ zIndex: 0 }}
+        >
+          <source src="/Vid1.mp4" type="video/mp4" />
+        </video>
+
+        {/* Dark overlay */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255,255,255,0.04) 0%, transparent 70%)',
+            background: 'rgba(0,0,0,0.6)',
+            zIndex: 1,
           }}
         />
 
         {/* Main content — takes all space above the carousel */}
         <div
-          className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 text-center"
-          style={{ paddingTop: '6rem', paddingBottom: '3rem' }}
+          className="flex-1 flex flex-col items-center justify-center px-6 text-center"
+          style={{ paddingTop: '6rem', paddingBottom: '3rem', position: 'relative', zIndex: 2 }}
         >
           <div className="max-w-4xl mx-auto w-full">
           {/* Main heading */}
@@ -305,7 +318,7 @@ export default function HomePage() {
                     }}
                   >
                     <span style={{ color: 'rgba(255,255,255,0.35)', paddingLeft: '1rem', fontSize: '0.875rem', whiteSpace: 'nowrap' }}>
-                      aerome.io/
+                      useaero.io/
                     </span>
                     <input
                       type="text"
@@ -390,7 +403,7 @@ export default function HomePage() {
                       fontSize: '0.875rem',
                     }}
                   >
-                    <span style={{ color: 'rgba(255,255,255,0.35)' }}>aerome.io/</span>
+                    <span style={{ color: 'rgba(255,255,255,0.35)' }}>useaero.io/</span>
                     <span style={{ color: '#fff', fontWeight: 500 }}>{username}</span>
                     <span style={{ marginLeft: '0.5rem', color: '#4ade80', fontSize: '0.75rem' }}>available</span>
                   </div>
@@ -483,7 +496,9 @@ export default function HomePage() {
         </div>{/* /flex-1 content */}
 
         {/* ── Chain carousel pinned to bottom of hero ── */}
-        <ChainCarousel />
+        <div style={{ position: 'relative', zIndex: 2 }}>
+          <ChainCarousel />
+        </div>
       </section>
 
       {/* ─────────────────── OVERVIEW ─────────────────── */}
@@ -509,7 +524,7 @@ export default function HomePage() {
           </h2>
 
           {/* Phone + floating features */}
-          <div className="relative flex items-center justify-center" style={{ minHeight: '760px' }}>
+          <div className="relative flex items-center justify-center min-h-[360px] lg:min-h-[760px]">
 
             {/* Left features — desktop */}
             <div
@@ -624,7 +639,7 @@ export default function HomePage() {
                 }}
               >
                 <span style={{ color: 'rgba(255,255,255,0.35)', paddingLeft: '1rem', fontSize: '0.875rem', whiteSpace: 'nowrap' }}>
-                  aerome.io/
+                  useaero.io/
                 </span>
                 <input
                   type="text"
@@ -731,6 +746,7 @@ function PhoneMockup() {
       ref={ref}
       style={{
         flexShrink: 0,
+        width: 'min(420px, 72vw)',
         transition: 'transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.9s ease',
         transform: visible ? 'translateY(0)' : 'translateY(56px)',
         opacity: visible ? 1 : 0,
@@ -741,7 +757,7 @@ function PhoneMockup() {
         alt="Aero app"
         width={420}
         height={840}
-        style={{ objectFit: 'contain', display: 'block' }}
+        style={{ objectFit: 'contain', display: 'block', width: '100%', height: 'auto' }}
         priority
       />
     </div>

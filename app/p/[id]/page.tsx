@@ -92,7 +92,7 @@ export default function PrivacyLinkPage({ params }: { params: Promise<{ id: stri
         <div className="mt-4 bg-white border border-brand/15 rounded-xl p-4 text-center shadow-sm">
           <p className="text-ink-muted text-xs mb-1 font-light">Want your own payment link?</p>
           <a href="/" className="text-brand text-sm font-medium hover:underline">
-            Claim aerome.io/yourname →
+            Claim useaero.io/yourname →
           </a>
         </div>
       </div>

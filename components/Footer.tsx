@@ -133,7 +133,7 @@ export function Footer() {
             style={{
               fontFamily: 'var(--font-inter)',
               fontWeight: 800,
-              fontSize: 'clamp(5rem, 19.5vw, 19.5vw)',
+              fontSize: 'clamp(4.5rem, 28vw, 300px)',
               letterSpacing: '-0.04em',
               lineHeight: 1.1,
               color: '#ffffff',

@@ -4,6 +4,7 @@ import './globals.css';
 import { WalletProvider } from '@/components/WalletProvider';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { SmoothScroll } from '@/components/SmoothScroll';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         style={{ fontFamily: 'var(--font-inter)', background: '#000000', color: '#ffffff' }}
       >
         <WalletProvider>
+          <SmoothScroll />
           <Navbar />
           <main className="min-h-screen">{children}</main>
           <Footer />
