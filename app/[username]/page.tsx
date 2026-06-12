@@ -26,62 +26,68 @@ export default function ProfilePage({ params }: { params: Promise<{ username: st
 
   if (profile === undefined) {
     return (
-      <div className="flex items-center justify-center min-h-[calc(100vh-96px)]">
-        <div className="w-5 h-5 border-2 border-brand/20 border-t-brand rounded-full animate-spin" />
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: '#000' }}>
+        <div style={{ width: 20, height: 20, border: '2px solid rgba(255,255,255,0.15)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
       </div>
     );
   }
 
   if (!profile) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-96px)] gap-4 text-center px-4">
-        <h1 className="text-ink text-xl font-light">@{username} not found</h1>
-        <p className="text-ink-muted text-sm font-light">This handle hasn&apos;t been claimed yet.</p>
-        <a href="/" className="text-brand hover:text-brand-hover text-sm transition-colors">
-          Claim aero.me/{username} →
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', gap: '1rem', textAlign: 'center', padding: '1rem', background: '#000' }}>
+        <h1 style={{ color: '#fff', fontSize: '1.25rem', fontWeight: 300, fontFamily: 'var(--font-inter)' }}>@{username} not found</h1>
+        <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.875rem', fontWeight: 300 }}>This handle hasn&apos;t been claimed yet.</p>
+        <a href="/" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.875rem', textDecoration: 'none', borderBottom: '1px solid rgba(255,255,255,0.2)', paddingBottom: '1px' }}>
+          Claim aerome.io/{username}
         </a>
       </div>
     );
   }
 
   return (
-    <div className="min-h-[calc(100vh-96px)] flex flex-col items-center justify-center px-4 py-16">
-      <div className="w-full max-w-md space-y-3">
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '6rem 1rem', background: '#000', fontFamily: 'var(--font-inter)' }}>
+      <div style={{ width: '100%', maxWidth: '420px', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
 
         {/* Main card */}
-        <div className="bg-white border border-brand/20 rounded-2xl overflow-hidden shadow-sm">
+        <div style={{ background: '#111', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '1.25rem', overflow: 'hidden' }}>
 
-          {/* Top accent bar */}
-          <div className="h-1 w-full bg-gradient-to-r from-brand/40 via-brand to-brand/40" />
+          {/* Subtle top line */}
+          <div style={{ height: '1px', background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent)' }} />
 
-          <div className="px-8 pt-8 pb-6 space-y-6">
+          <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
 
             {/* Name + handle */}
             <div>
-              <p className="text-xs text-ink-subtle font-light tracking-widest uppercase mb-2">Payment request</p>
-              <h1 className="text-3xl font-extralight text-ink tracking-wide">{profile.displayName}</h1>
-              <p className="text-brand text-sm font-light mt-1">aero.me/{profile.username}</p>
+              <p style={{ fontSize: '0.5625rem', letterSpacing: '0.18em', color: 'rgba(255,255,255,0.25)', textTransform: 'uppercase', marginBottom: '0.625rem', fontWeight: 500 }}>
+                Payment request
+              </p>
+              <h1 style={{ fontSize: '1.875rem', fontWeight: 300, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+                {profile.displayName}
+              </h1>
+              <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.875rem', fontWeight: 300, marginTop: '0.375rem' }}>
+                aerome.io/{profile.username}
+              </p>
               {profile.bio && (
-                <p className="text-ink-muted text-sm font-light mt-3 leading-relaxed border-l-2 border-brand/20 pl-3">
+                <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.875rem', fontWeight: 300, marginTop: '0.875rem', lineHeight: 1.65, borderLeft: '2px solid rgba(255,255,255,0.1)', paddingLeft: '0.75rem' }}>
                   {profile.bio}
                 </p>
               )}
             </div>
 
-            {/* Wallet row — expandable */}
-            <div className="border-y border-brand/10">
+            {/* Wallet row */}
+            <div style={{ borderTop: '1px solid rgba(255,255,255,0.07)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
               <button
                 onClick={() => setWalletOpen(o => !o)}
-                className="w-full flex items-center justify-between py-3 group"
+                style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.75rem 0', background: 'none', border: 'none', cursor: 'pointer' }}
               >
-                <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full" />
-                  <span className="text-ink-subtle text-xs font-light">Verified wallet</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4ade80', flexShrink: 0, display: 'inline-block' }} />
+                  <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.75rem', fontWeight: 300 }}>Verified wallet</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-ink-muted text-xs font-mono">{shortAddress(profile.walletAddress)}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.75rem', fontFamily: 'monospace' }}>{shortAddress(profile.walletAddress)}</span>
                   <svg
-                    className={`w-3.5 h-3.5 text-ink-subtle transition-transform duration-200 ${walletOpen ? 'rotate-180' : ''}`}
+                    style={{ width: 14, height: 14, color: 'rgba(255,255,255,0.25)', transition: 'transform 0.2s', transform: walletOpen ? 'rotate(180deg)' : 'rotate(0deg)', flexShrink: 0 }}
                     fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
@@ -89,21 +95,20 @@ export default function ProfilePage({ params }: { params: Promise<{ username: st
                 </div>
               </button>
 
-              {/* Expanded detail */}
-              <div className={`overflow-hidden transition-all duration-200 ${walletOpen ? 'max-h-32 pb-3' : 'max-h-0'}`}>
-                <div className="bg-brand/5 border border-brand/15 rounded-xl p-3 space-y-2">
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="text-ink-muted text-xs font-mono break-all leading-relaxed">
+              <div style={{ overflow: 'hidden', maxHeight: walletOpen ? '8rem' : 0, transition: 'max-height 0.2s ease', paddingBottom: walletOpen ? '0.75rem' : 0 }}>
+                <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '0.75rem', padding: '0.75rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.5rem' }}>
+                    <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.75rem', fontFamily: 'monospace', wordBreak: 'break-all', lineHeight: 1.5 }}>
                       {profile.walletAddress}
                     </p>
                     <button
                       onClick={() => copyAddress(profile.walletAddress)}
-                      className="shrink-0 text-xs text-brand hover:text-brand-hover font-medium transition-colors"
+                      style={{ flexShrink: 0, fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--font-inter)', fontWeight: 500, whiteSpace: 'nowrap' }}
                     >
                       {copied ? 'Copied!' : 'Copy'}
                     </button>
                   </div>
-                  <p className="text-ink-subtle text-xs font-light">Solana · Mainnet</p>
+                  <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: '0.75rem', fontWeight: 300 }}>Solana · Mainnet</p>
                 </div>
               </div>
             </div>
@@ -111,23 +116,34 @@ export default function ProfilePage({ params }: { params: Promise<{ username: st
             {/* CTA */}
             <button
               onClick={() => setShowPayModal(true)}
-              className="group w-full bg-brand text-white font-medium rounded-xl py-3.5 hover:bg-brand/80 hover:shadow-[0_4px_20px_rgba(91,192,240,0.35)] transition-all flex items-center justify-center gap-2"
+              style={{
+                fontFamily: 'var(--font-inter)',
+                background: '#ffffff',
+                color: '#000000',
+                fontWeight: 500,
+                fontSize: '0.9375rem',
+                padding: '0.9375rem',
+                borderRadius: '0.875rem',
+                border: 'none',
+                cursor: 'pointer',
+                width: '100%',
+                letterSpacing: '-0.01em',
+              }}
             >
               Send to {profile.displayName}
-              <svg className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
             </button>
 
-            <p className="text-center text-ink-subtle text-xs font-light">Secured by Aero · Solana</p>
+            <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.2)', fontSize: '0.6875rem', fontWeight: 300, letterSpacing: '0.04em' }}>
+              Secured by Aero · Solana
+            </p>
           </div>
         </div>
 
         {/* Footer nudge */}
-        <div className="bg-white/60 border border-brand/10 rounded-xl px-5 py-3.5 flex items-center justify-between shadow-sm">
-          <p className="text-ink-muted text-xs font-light">Want your own payment link?</p>
-          <a href="/" className="text-brand text-xs font-medium hover:underline shrink-0 ml-4">
-            Claim yours →
+        <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '0.875rem', padding: '0.875rem 1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.75rem', fontWeight: 300 }}>Want your own payment link?</p>
+          <a href="/" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.75rem', fontWeight: 500, textDecoration: 'none', borderBottom: '1px solid rgba(255,255,255,0.2)', paddingBottom: '1px', flexShrink: 0, marginLeft: '1rem' }}>
+            Claim yours
           </a>
         </div>
 

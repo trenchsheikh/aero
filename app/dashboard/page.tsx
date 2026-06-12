@@ -50,7 +50,7 @@ export default function DashboardPage() {
 
   if (!publicKey) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] gap-6 px-4 text-center">
+      <div className="flex flex-col items-center justify-center min-h-screen gap-6 px-4 text-center">
         <h1 className="text-ink text-2xl font-medium">Connect your wallet</h1>
         <p className="text-ink-muted text-sm font-light">to access your Aero dashboard</p>
         <WalletMultiButton />
@@ -60,7 +60,7 @@ export default function DashboardPage() {
 
   if (!profile) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] gap-6 px-4 text-center">
+      <div className="flex flex-col items-center justify-center min-h-screen gap-6 px-4 text-center">
         <h1 className="text-ink text-2xl font-medium">No profile found</h1>
         <p className="text-ink-muted text-sm font-light">Claim your Aero handle to get started</p>
         <button
@@ -79,7 +79,7 @@ export default function DashboardPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-ink text-2xl font-semibold">{profile.displayName}</h1>
-          <p className="text-brand/70 text-sm mt-0.5 font-light">aero.me/{profile.username}</p>
+          <p className="text-brand/70 text-sm mt-0.5 font-light">aerome.io/{profile.username}</p>
         </div>
         <div className="text-right">
           {balance !== null && (

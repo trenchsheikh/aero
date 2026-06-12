@@ -23,7 +23,7 @@ export default function PrivacyLinkPage({ params }: { params: Promise<{ id: stri
 
   if (link === undefined) {
     return (
-      <div className="flex items-center justify-center min-h-[calc(100vh-64px)]">
+      <div className="flex items-center justify-center min-h-screen">
         <div className="w-6 h-6 border-2 border-brand/20 border-t-brand rounded-full animate-spin" />
       </div>
     );
@@ -31,7 +31,7 @@ export default function PrivacyLinkPage({ params }: { params: Promise<{ id: stri
 
   if (!link) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] gap-4 text-center px-4">
+      <div className="flex flex-col items-center justify-center min-h-screen gap-4 text-center px-4">
         <p className="text-4xl">🔗</p>
         <h1 className="text-ink text-xl font-medium">Link not found</h1>
         <p className="text-ink-muted text-sm font-light">This payment link doesn&apos;t exist.</p>
@@ -41,7 +41,7 @@ export default function PrivacyLinkPage({ params }: { params: Promise<{ id: stri
 
   if (link.used) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] gap-4 text-center px-4">
+      <div className="flex flex-col items-center justify-center min-h-screen gap-4 text-center px-4">
         <div className="w-16 h-16 bg-brand/8 border border-brand/20 rounded-full flex items-center justify-center">
           <span className="text-2xl">🔒</span>
         </div>
@@ -63,7 +63,7 @@ export default function PrivacyLinkPage({ params }: { params: Promise<{ id: stri
   }
 
   return (
-    <div className="min-h-[calc(100vh-64px)] flex flex-col items-center justify-center px-4 py-16">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-16">
       <div className="w-full max-w-sm">
         <div className="bg-navy-card border border-brand/20 rounded-2xl p-8 text-center space-y-5 shadow-sm">
           <div className="w-16 h-16 bg-brand/8 border border-brand/20 rounded-full flex items-center justify-center mx-auto">
@@ -92,7 +92,7 @@ export default function PrivacyLinkPage({ params }: { params: Promise<{ id: stri
         <div className="mt-4 bg-white border border-brand/15 rounded-xl p-4 text-center shadow-sm">
           <p className="text-ink-muted text-xs mb-1 font-light">Want your own payment link?</p>
           <a href="/" className="text-brand text-sm font-medium hover:underline">
-            Claim aero.me/yourname →
+            Claim aerome.io/yourname →
           </a>
         </div>
       </div>

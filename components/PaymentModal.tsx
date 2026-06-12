@@ -30,30 +30,39 @@ const TX_FEE_BUFFER = 0.000015;
 function classifyError(e: unknown): PayError {
   const raw = e instanceof Error ? e.message : String(e);
   const lower = raw.toLowerCase();
-
-  if (lower.includes('user rejected') || lower.includes('rejected the request') || lower.includes('cancelled') || lower.includes('canceled')) {
+  if (lower.includes('user rejected') || lower.includes('rejected the request') || lower.includes('cancelled') || lower.includes('canceled'))
     return { title: 'Payment cancelled', detail: 'You declined the transaction in your wallet.', canRetry: true, action: 'Try again' };
-  }
-  if (lower.includes('insufficient') || lower.includes('0x1') || lower.includes('insufficient lamports') || lower.includes('not enough sol')) {
+  if (lower.includes('insufficient') || lower.includes('0x1') || lower.includes('insufficient lamports') || lower.includes('not enough sol'))
     return { title: 'Insufficient funds', detail: "Your wallet doesn't have enough SOL to cover this payment plus the network fee.", canRetry: true, action: 'Change amount' };
-  }
-  if (lower.includes('blockhash not found') || lower.includes('block height exceeded') || lower.includes('blockhash expired')) {
+  if (lower.includes('blockhash not found') || lower.includes('block height exceeded') || lower.includes('blockhash expired'))
     return { title: 'Transaction expired', detail: 'The transaction took too long and expired. This can happen when the network is congested.', canRetry: true, action: 'Try again' };
-  }
-  if (lower.includes('already been processed') || lower.includes('already processed')) {
+  if (lower.includes('already been processed') || lower.includes('already processed'))
     return { title: 'Already sent', detail: 'This transaction was already processed — your funds were sent.', canRetry: false, action: 'Close' };
-  }
-  if (lower.includes('failed to fetch') || lower.includes('network') || lower.includes('econnrefused') || lower.includes('timeout') || lower.includes('503') || lower.includes('429')) {
+  if (lower.includes('failed to fetch') || lower.includes('network') || lower.includes('econnrefused') || lower.includes('timeout') || lower.includes('503') || lower.includes('429'))
     return { title: 'Network error', detail: 'Could not reach the Solana network. Check your connection and try again.', canRetry: true, action: 'Try again' };
-  }
-  if (lower.includes('wallet not connected') || lower.includes('not connected')) {
+  if (lower.includes('wallet not connected') || lower.includes('not connected'))
     return { title: 'Wallet disconnected', detail: 'Your wallet disconnected during the transaction. Reconnect and try again.', canRetry: true, action: 'Try again' };
-  }
-  if (lower.includes('simulation failed') || lower.includes('0x0')) {
+  if (lower.includes('simulation failed') || lower.includes('0x0'))
     return { title: 'Transaction failed', detail: 'Solana rejected the transaction during simulation. Your funds were not sent.', canRetry: true, action: 'Try again' };
-  }
   return { title: 'Something went wrong', detail: raw.length < 120 ? raw : 'An unexpected error occurred. Your funds were not sent.', canRetry: true, action: 'Try again' };
 }
+
+const card: React.CSSProperties = {
+  fontFamily: 'var(--font-inter)',
+  position: 'relative',
+  background: '#111111',
+  border: '1px solid rgba(255,255,255,0.1)',
+  borderRadius: '1.25rem 1.25rem 0 0',
+  width: '100%',
+  padding: '1.25rem 1.25rem 2rem',
+  boxShadow: '0 -4px 60px rgba(0,0,0,0.8)',
+};
+
+const cardSm: React.CSSProperties = {
+  borderRadius: '1.25rem',
+  maxWidth: '26rem',
+  padding: '1.5rem',
+};
 
 export function PaymentModal({ recipientWallet, recipientUsername, displayName, onClose, privacyLinkId }: PaymentModalProps) {
   const { publicKey, sendTransaction } = useWallet();
@@ -66,10 +75,18 @@ export function PaymentModal({ recipientWallet, recipientUsername, displayName, 
   const [balanceLoading, setBalanceLoading] = useState(false);
   const [amountError, setAmountError] = useState('');
   const [mounted, setMounted] = useState(false);
+  const [isSmall, setIsSmall] = useState(false);
 
   const presets = [0.01, 0.05, 0.1, 0.5];
 
   useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 640px)');
+    setIsSmall(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsSmall(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
   useEffect(() => {
     if (!publicKey) return;
@@ -84,7 +101,7 @@ export function PaymentModal({ recipientWallet, recipientUsername, displayName, 
     if (sol < 0.000001) return 'Minimum amount is 0.000001 SOL';
     if (balance !== null && sol + TX_FEE_BUFFER > balance) {
       const max = Math.max(0, balance - TX_FEE_BUFFER);
-      return `Insufficient funds. Max you can send: ${max.toFixed(5)} SOL (keeping a small amount for fees)`;
+      return `Insufficient funds. Max: ${max.toFixed(5)} SOL`;
     }
     return '';
   }
@@ -99,23 +116,16 @@ export function PaymentModal({ recipientWallet, recipientUsername, displayName, 
     const sol = parseFloat(amount);
     const err = validateAmount(amount);
     if (err) { setAmountError(err); return; }
-
     setStep('confirm');
     try {
       const toPubkey = new PublicKey(recipientWallet);
       const tx = await buildTransferTx(publicKey, toPubkey, sol);
       const sig = await sendTransaction(tx, connection);
       await connection.confirmTransaction(sig, 'confirmed');
-
       const record: PaymentRecord = {
-        id: uuidv4(),
-        recipientUsername,
-        recipientWallet,
-        senderWallet: publicKey.toBase58(),
-        amountSol: sol,
-        txSignature: sig,
-        timestamp: Date.now(),
-        privacyLinkId,
+        id: uuidv4(), recipientUsername, recipientWallet,
+        senderWallet: publicKey.toBase58(), amountSol: sol,
+        txSignature: sig, timestamp: Date.now(), privacyLinkId,
       };
       store.savePayment(record);
       if (privacyLinkId) store.markPrivacyLinkUsed(privacyLinkId, sig);
@@ -130,66 +140,70 @@ export function PaymentModal({ recipientWallet, recipientUsername, displayName, 
   const sol = parseFloat(amount);
   const isValidAmount = amount && !isNaN(sol) && sol > 0 && !amountError;
 
-  return (
-    <div className="fixed inset-0 z-50 flex flex-col justify-end sm:items-center sm:justify-center sm:p-4">
-      <div className="absolute inset-0 bg-ink/15 backdrop-blur-sm" onClick={step === 'confirm' ? undefined : onClose} />
-      <div className="relative bg-white border border-brand/20 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-sm px-5 sm:px-6 pt-5 pb-8 sm:pb-6 shadow-xl">
+  const mergedCard = isSmall ? { ...card, ...cardSm } : card;
 
-        {/* Drag handle — mobile only */}
-        <div className="sm:hidden flex justify-center mb-3">
-          <div className="w-10 h-1 bg-brand/20 rounded-full" />
-        </div>
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', alignItems: isSmall ? 'center' : 'stretch', padding: isSmall ? '1rem' : 0 }}>
+      {/* Backdrop */}
+      <div
+        style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(8px)' }}
+        onClick={step === 'confirm' ? undefined : onClose}
+      />
+
+      <div style={mergedCard}>
+        {/* Drag handle — mobile */}
+        {!isSmall && (
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.875rem' }}>
+            <div style={{ width: '2.5rem', height: '4px', background: 'rgba(255,255,255,0.15)', borderRadius: '9999px' }} />
+          </div>
+        )}
 
         {/* Header */}
-        <div className="flex items-center justify-between mb-5 sm:mb-6">
-          <h2 className="text-ink font-medium text-lg">
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
+          <h2 style={{ color: '#fff', fontWeight: 500, fontSize: '1.125rem', letterSpacing: '-0.01em' }}>
             {step === 'success' ? 'Sent!' : step === 'error' ? (payError?.title ?? 'Error') : `Pay ${displayName}`}
           </h2>
           {step !== 'confirm' && (
-            <button onClick={onClose} className="text-ink-subtle hover:text-brand text-xl leading-none transition-colors p-1 touch-manipulation">
+            <button
+              onClick={onClose}
+              style={{ color: 'rgba(255,255,255,0.35)', background: 'none', border: 'none', fontSize: '1.375rem', cursor: 'pointer', lineHeight: 1, padding: '0.25rem' }}
+            >
               ×
             </button>
           )}
         </div>
 
-        {/* Amount step */}
+        {/* ── Amount step ── */}
         {step === 'amount' && (
           <>
             {!publicKey ? (
-              <div className="space-y-4">
-                <p className="text-ink-muted text-sm text-center font-light">Connect your wallet to pay</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.875rem', textAlign: 'center', fontWeight: 300 }}>Connect your wallet to pay</p>
                 {mounted && (
-                  <WalletMultiButton
-                    style={{
-                      background: '#5BC0F0',
-                      border: 'none',
-                      borderRadius: '12px',
-                      color: '#ffffff',
-                      fontSize: '14px',
-                      fontWeight: '400',
-                      height: '44px',
-                      width: '100%',
-                      justifyContent: 'center',
-                    }}
-                  />
+                  <WalletMultiButton style={{
+                    background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.14)',
+                    borderRadius: '12px', color: '#ffffff', fontSize: '14px', fontWeight: '400',
+                    height: '50px', width: '100%', justifyContent: 'center',
+                  }} />
                 )}
               </div>
             ) : (
-              <div className="space-y-4">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 {/* Balance */}
-                <div className="flex items-center justify-between text-xs">
-                  <span className="text-ink-muted font-light">Amount (SOL)</span>
-                  <span className="text-ink-muted font-light">
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem' }}>
+                  <span style={{ color: 'rgba(255,255,255,0.35)', fontWeight: 300 }}>Amount (SOL)</span>
+                  <span style={{ color: 'rgba(255,255,255,0.35)', fontWeight: 300 }}>
                     Balance:{' '}
                     {balanceLoading
-                      ? <span className="text-ink-subtle">loading...</span>
+                      ? <span style={{ color: 'rgba(255,255,255,0.2)' }}>loading…</span>
                       : balance !== null
-                        ? <span className={balance < 0.001 ? 'text-red-500' : 'text-ink-muted'}>{balance.toFixed(4)} SOL</span>
-                        : <span className="text-ink-subtle">—</span>
+                        ? <span style={{ color: balance < 0.001 ? '#f87171' : 'rgba(255,255,255,0.5)' }}>{balance.toFixed(4)} SOL</span>
+                        : <span style={{ color: 'rgba(255,255,255,0.2)' }}>—</span>
                     }
                   </span>
                 </div>
 
+                {/* Input */}
                 <div>
                   <input
                     type="number"
@@ -200,23 +214,32 @@ export function PaymentModal({ recipientWallet, recipientUsername, displayName, 
                     step="0.001"
                     inputMode="decimal"
                     autoFocus
-                    className={`w-full bg-brand/5 border rounded-xl px-4 py-3 text-ink text-xl font-mono focus:outline-none transition-colors ${
-                      amountError ? 'border-red-400 focus:border-red-500' : 'border-brand/20 focus:border-brand/50'
-                    }`}
+                    style={{
+                      width: '100%',
+                      background: 'rgba(255,255,255,0.05)',
+                      border: `1px solid ${amountError ? '#f87171' : 'rgba(255,255,255,0.12)'}`,
+                      borderRadius: '12px',
+                      padding: '0.875rem 1rem',
+                      color: '#ffffff',
+                      fontSize: '1.375rem',
+                      fontFamily: 'monospace',
+                      outline: 'none',
+                      boxSizing: 'border-box',
+                    }}
                   />
-                  {amountError && <p className="mt-1.5 text-red-500 text-xs leading-snug">{amountError}</p>}
+                  {amountError && <p style={{ marginTop: '0.375rem', color: '#f87171', fontSize: '0.75rem', lineHeight: 1.4 }}>{amountError}</p>}
                 </div>
 
                 {/* Low balance warning */}
                 {balance !== null && balance < 0.001 && (
-                  <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2.5">
-                    <span className="text-amber-500 mt-0.5">⚠</span>
-                    <p className="text-amber-700 text-xs leading-snug">Your balance is very low. Please add SOL to your wallet before sending.</p>
+                  <div style={{ display: 'flex', gap: '0.5rem', background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.2)', borderRadius: '12px', padding: '0.625rem 0.875rem' }}>
+                    <span style={{ color: '#fbbf24' }}>⚠</span>
+                    <p style={{ color: 'rgba(251,191,36,0.85)', fontSize: '0.75rem', lineHeight: 1.4 }}>Your balance is very low. Add SOL before sending.</p>
                   </div>
                 )}
 
-                {/* Preset amounts */}
-                <div className="grid grid-cols-4 gap-2">
+                {/* Presets */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem' }}>
                   {presets.map(p => {
                     const tooLarge = balance !== null && p + TX_FEE_BUFFER > balance;
                     return (
@@ -224,11 +247,17 @@ export function PaymentModal({ recipientWallet, recipientUsername, displayName, 
                         key={p}
                         onClick={() => handleAmountChange(String(p))}
                         disabled={tooLarge}
-                        className={`border rounded-lg py-1.5 text-xs transition-all ${
-                          tooLarge
-                            ? 'bg-brand/3 border-brand/8 text-ink-subtle/40 cursor-not-allowed'
-                            : 'bg-brand/8 hover:bg-brand/15 border-brand/20 text-brand hover:text-ink'
-                        }`}
+                        style={{
+                          fontFamily: 'var(--font-inter)',
+                          background: 'rgba(255,255,255,0.05)',
+                          border: '1px solid rgba(255,255,255,0.1)',
+                          borderRadius: '8px',
+                          padding: '0.375rem 0',
+                          fontSize: '0.75rem',
+                          color: tooLarge ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.6)',
+                          cursor: tooLarge ? 'not-allowed' : 'pointer',
+                          transition: 'background 0.15s',
+                        }}
                       >
                         {p}
                       </button>
@@ -240,16 +269,29 @@ export function PaymentModal({ recipientWallet, recipientUsername, displayName, 
                 {balance !== null && balance > TX_FEE_BUFFER && (
                   <button
                     onClick={() => handleAmountChange((balance - TX_FEE_BUFFER).toFixed(5))}
-                    className="w-full text-xs text-ink-muted hover:text-brand transition-colors"
+                    style={{ fontFamily: 'var(--font-inter)', background: 'none', border: 'none', color: 'rgba(255,255,255,0.35)', fontSize: '0.75rem', cursor: 'pointer', padding: '0.25rem 0' }}
                   >
                     Send max ({(balance - TX_FEE_BUFFER).toFixed(5)} SOL)
                   </button>
                 )}
 
+                {/* Primary CTA */}
                 <button
                   onClick={handlePay}
                   disabled={!isValidAmount}
-                  className="w-full bg-brand text-white font-medium rounded-xl py-4 sm:py-3 hover:bg-brand/80 hover:shadow-[0_4px_16px_rgba(91,192,240,0.35)] disabled:opacity-30 disabled:cursor-not-allowed transition-all touch-manipulation"
+                  style={{
+                    fontFamily: 'var(--font-inter)',
+                    background: isValidAmount ? '#ffffff' : 'rgba(255,255,255,0.15)',
+                    color: isValidAmount ? '#000000' : 'rgba(255,255,255,0.3)',
+                    fontWeight: 500,
+                    fontSize: '0.9375rem',
+                    padding: '0.9375rem',
+                    borderRadius: '12px',
+                    border: 'none',
+                    cursor: isValidAmount ? 'pointer' : 'not-allowed',
+                    width: '100%',
+                    transition: 'background 0.15s, color 0.15s',
+                  }}
                 >
                   Send {amount && !isNaN(sol) && sol > 0 ? `${sol} SOL` : ''}
                 </button>
@@ -258,29 +300,29 @@ export function PaymentModal({ recipientWallet, recipientUsername, displayName, 
           </>
         )}
 
-        {/* Confirming */}
+        {/* ── Confirming ── */}
         {step === 'confirm' && (
-          <div className="flex flex-col items-center gap-4 py-4">
-            <div className="w-10 h-10 border-2 border-brand/20 border-t-brand rounded-full animate-spin" />
-            <div className="text-center space-y-1">
-              <p className="text-ink text-sm font-medium">Waiting for approval</p>
-              <p className="text-ink-muted text-xs font-light">Check your wallet and approve the transaction</p>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', padding: '1rem 0' }}>
+            <div style={{ width: 40, height: 40, border: '2px solid rgba(255,255,255,0.1)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+            <div style={{ textAlign: 'center' }}>
+              <p style={{ color: '#fff', fontSize: '0.9375rem', fontWeight: 500 }}>Waiting for approval</p>
+              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.8125rem', fontWeight: 300, marginTop: '0.25rem' }}>Check your wallet and approve the transaction</p>
             </div>
           </div>
         )}
 
-        {/* Success */}
+        {/* ── Success ── */}
         {step === 'success' && (
-          <div className="space-y-4">
-            <div className="flex flex-col items-center gap-3 py-2">
-              <div className="w-14 h-14 bg-green-50 border border-green-200 rounded-full flex items-center justify-center">
-                <svg className="w-7 h-7 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.875rem', padding: '0.5rem 0' }}>
+              <div style={{ width: 56, height: 56, background: 'rgba(74,222,128,0.1)', border: '1px solid rgba(74,222,128,0.25)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg style={{ width: 28, height: 28, color: '#4ade80' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <div className="text-center">
-                <p className="text-ink font-medium text-lg">{amount} SOL sent</p>
-                <p className="text-ink-muted text-sm font-light">to {displayName}</p>
+              <div style={{ textAlign: 'center' }}>
+                <p style={{ color: '#fff', fontWeight: 500, fontSize: '1.0625rem' }}>{amount} SOL sent</p>
+                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.875rem', fontWeight: 300, marginTop: '0.25rem' }}>to {displayName}</p>
               </div>
             </div>
 
@@ -288,48 +330,42 @@ export function PaymentModal({ recipientWallet, recipientUsername, displayName, 
               href={explorerUrl(txSig)}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 w-full bg-brand/8 hover:bg-brand/15 border border-brand/20 rounded-xl py-3 text-brand text-sm transition-all"
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '0.75rem', color: 'rgba(255,255,255,0.7)', fontSize: '0.875rem', textDecoration: 'none', fontFamily: 'var(--font-inter)' }}
             >
               View on Explorer
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg style={{ width: 14, height: 14 }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
               </svg>
             </a>
 
-            <div className="bg-brand/5 border border-brand/15 rounded-xl p-3 text-center">
-              <p className="text-ink-muted text-xs font-light">Want to get paid like this?</p>
-              <a href="/" className="text-brand text-sm font-medium hover:underline">
-                Claim your aero link →
+            <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', borderRadius: '12px', padding: '0.75rem', textAlign: 'center' }}>
+              <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.75rem', fontWeight: 300, marginBottom: '0.25rem' }}>Want to get paid like this?</p>
+              <a href="/" style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.875rem', fontWeight: 500, textDecoration: 'none', fontFamily: 'var(--font-inter)' }}>
+                Claim your aero link
               </a>
             </div>
           </div>
         )}
 
-        {/* Error */}
+        {/* ── Error ── */}
         {step === 'error' && payError && (
-          <div className="space-y-4">
-            <div className="flex flex-col items-center gap-3 py-2">
-              <div className="w-14 h-14 bg-red-50 border border-red-200 rounded-full flex items-center justify-center">
-                {payError.canRetry ? (
-                  <svg className="w-7 h-7 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M12 2a10 10 0 100 20A10 10 0 0012 2z" />
-                  </svg>
-                ) : (
-                  <svg className="w-7 h-7 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                )}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.875rem', padding: '0.5rem 0' }}>
+              <div style={{ width: 56, height: 56, background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.25)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg style={{ width: 28, height: 28, color: '#f87171' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={payError.canRetry ? 'M12 9v2m0 4h.01M12 2a10 10 0 100 20A10 10 0 0012 2z' : 'M6 18L18 6M6 6l12 12'} />
+                </svg>
               </div>
-              <div className="text-center space-y-1">
-                <p className="text-ink font-medium">{payError.title}</p>
-                <p className="text-ink-muted text-sm leading-snug font-light">{payError.detail}</p>
+              <div style={{ textAlign: 'center' }}>
+                <p style={{ color: '#fff', fontWeight: 500 }}>{payError.title}</p>
+                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.875rem', fontWeight: 300, marginTop: '0.25rem', lineHeight: 1.5 }}>{payError.detail}</p>
               </div>
             </div>
 
             {payError.canRetry && (
               <button
                 onClick={() => { setStep('amount'); setPayError(null); }}
-                className="w-full bg-brand text-white font-medium rounded-xl py-3 hover:bg-brand/80 hover:shadow-[0_4px_16px_rgba(91,192,240,0.35)] transition-all text-sm"
+                style={{ fontFamily: 'var(--font-inter)', background: '#ffffff', color: '#000000', fontWeight: 500, fontSize: '0.9375rem', padding: '0.9375rem', borderRadius: '12px', border: 'none', cursor: 'pointer', width: '100%' }}
               >
                 {payError.action ?? 'Try again'}
               </button>
@@ -337,7 +373,7 @@ export function PaymentModal({ recipientWallet, recipientUsername, displayName, 
 
             <button
               onClick={onClose}
-              className="w-full bg-brand/5 hover:bg-brand/10 border border-brand/15 rounded-xl py-2.5 text-ink-muted hover:text-ink text-sm font-light transition-all"
+              style={{ fontFamily: 'var(--font-inter)', background: 'none', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '0.75rem', color: 'rgba(255,255,255,0.4)', fontSize: '0.875rem', fontWeight: 300, cursor: 'pointer', width: '100%' }}
             >
               {payError.canRetry ? 'Cancel' : 'Close'}
             </button>
