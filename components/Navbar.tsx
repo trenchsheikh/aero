@@ -19,12 +19,10 @@ export function Navbar() {
   useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
-    if (publicKey) {
-      const profile = store.getProfileByWallet(publicKey.toBase58());
+    if (!publicKey) { setUsername(null); return; }
+    store.getProfileByWallet(publicKey.toBase58()).then(profile => {
       setUsername(profile?.username ?? null);
-    } else {
-      setUsername(null);
-    }
+    });
   }, [publicKey]);
 
   useEffect(() => {
