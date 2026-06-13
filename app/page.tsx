@@ -82,6 +82,8 @@ export default function HomePage() {
   const [sendTarget, setSendTarget] = useState('');
   const [sendError, setSendError] = useState('');
   const [showClaimForm, setShowClaimForm] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
   const claimRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => { setMounted(true); }, []);
@@ -116,6 +118,8 @@ export default function HomePage() {
 
   async function handleCreateProfile() {
     if (!publicKey) return;
+    setSaving(true);
+    setSaveError('');
     const profile: AeroProfile = {
       username: username.toLowerCase(),
       displayName: displayName || username,
@@ -123,8 +127,14 @@ export default function HomePage() {
       walletAddress: publicKey.toBase58(),
       createdAt: Date.now(),
     };
-    await store.saveProfile(profile);
-    router.push(`/${profile.username}`);
+    try {
+      await store.saveProfile(profile);
+      router.push(`/${profile.username}`);
+    } catch (e) {
+      console.error('saveProfile failed:', e);
+      setSaveError('Failed to save profile. Check console for details.');
+      setSaving(false);
+    }
   }
 
   async function handleSendPayment() {
@@ -455,9 +465,13 @@ export default function HomePage() {
                     />
                   </div>
 
+                  {saveError && (
+                    <p style={{ color: '#f87171', fontSize: '0.75rem', paddingLeft: '0.25rem' }}>{saveError}</p>
+                  )}
+
                   <button
                     onClick={handleCreateProfile}
-                    disabled={!publicKey}
+                    disabled={!publicKey || saving}
                     style={{
                       background: '#ffffff',
                       color: '#000000',
@@ -466,12 +480,12 @@ export default function HomePage() {
                       padding: '0.875rem',
                       borderRadius: '16px',
                       border: 'none',
-                      cursor: !publicKey ? 'not-allowed' : 'pointer',
-                      opacity: !publicKey ? 0.3 : 1,
+                      cursor: (!publicKey || saving) ? 'not-allowed' : 'pointer',
+                      opacity: (!publicKey || saving) ? 0.3 : 1,
                       width: '100%',
                     }}
                   >
-                    Create my Aero profile
+                    {saving ? 'Saving...' : 'Create my Aero profile'}
                   </button>
 
                   <button
